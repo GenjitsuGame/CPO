@@ -1,5 +1,5 @@
 /*
- * CPO - Cartes -salut
+ * CPO - Cartes
  */
 package cartes;
 
