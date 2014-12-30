@@ -3,10 +3,11 @@
  */
 package jeux;
 
+
 /**
  *
  * @author Pascal Luttgens
  */
 public interface Joueur {
-    
+
 }

@@ -1,5 +1,5 @@
 /*
- * CPO - Cartes - jazdazdmaofOFU
+ * CPO - Cartes
  */
 package cartes;
 
