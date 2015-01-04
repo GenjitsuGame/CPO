@@ -11,4 +11,7 @@ package io;
  */
 public interface InputHandler {
     
+    public void start();
+    
+    public void traite(String input);
 }

@@ -9,5 +9,7 @@ package application;
  */
 public interface IO {
     
-
+    public void start();
+    
+    public void input();
 }

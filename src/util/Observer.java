@@ -15,7 +15,7 @@ package util;
  *
  * @since 1.0
  */
-public interface Observer {
+public interface Observer<T> {
     /**
      * Passe l'event à l'observer
      *
@@ -23,5 +23,5 @@ public interface Observer {
      *
      * @param event L'event
      */
-    void onNotify(int event);
+    void onNotify(T event);
 }

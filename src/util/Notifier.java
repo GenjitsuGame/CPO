@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @since 1.0
  */
-public class Notifier {
+public class Notifier<T> {
     
     private final Object lock;
     
@@ -31,7 +31,7 @@ public class Notifier {
         this.lock = new Object();
     }
     
-    public void registerObserver(Observer o) {
+    public void registerObserver(Observer<T> o) {
         synchronized (lock) {
             if (!observers.contains(o)) {
                 observers.add(o);
@@ -39,21 +39,21 @@ public class Notifier {
         }
     }
     
-    public void unregisterObserver(Observer o) {
+    public void unregisterObserver(Observer<T> o) {
         synchronized (lock) {
             observers.remove(o);
         }
     }
     
-    public boolean isRegistered(Observer o) {
+    public boolean isRegistered(Observer<T> o) {
         synchronized (lock) {
             return observers.contains(o);
         }
     }
     
-    public void notifyObservers(int e) {
+    public void notifyObservers(T e) {
         synchronized (lock) {
-            for (Observer o : observers) {
+            for (Observer<T> o : observers) {
                 o.onNotify(e);
             }
         }

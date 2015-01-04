@@ -6,18 +6,23 @@
 package io;
 
 import application.IO;
+import io.Jeu;
+import util.Observer;
+import util.RingBuffer;
 
 /**
  *
  * @author scalpa
  */
-public abstract class AbstractIO implements IO {
-    
-    protected final Affichable jeu;
+public abstract class AbstractIO implements IO, Observer<Integer> {
 
-    public AbstractIO(Affichable jeu) {
-        this.jeu = jeu;
+    protected final Jeu jeu;
+
+ 
+    public AbstractIO(final Jeu jeu) {
+        this.jeu = (Jeu) jeu;
+
+        jeu.getNotifier().registerObserver(this);
     }
-    
-    
+
 }

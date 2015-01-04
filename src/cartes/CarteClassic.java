@@ -6,7 +6,6 @@
 
 package cartes;
 
-import java.util.Comparator;
 import jeux.Carte;
 
 /**
@@ -17,7 +16,7 @@ public class CarteClassic extends AbstractCarte {
     private final String valeur;
     private final String type;
     
-    public CarteClassic(String valeur, String type){
+    public CarteClassic(String type, String valeur){
         this.valeur = valeur;
         this.type = type;
     }

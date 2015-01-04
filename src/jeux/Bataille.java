@@ -5,6 +5,7 @@
  */
 package jeux;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,7 +13,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
-import util.Notifier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import util.RingBuffer;
 
 /**
@@ -20,43 +22,42 @@ import util.RingBuffer;
  * @author Adrien
  */
 public class Bataille extends AbstractRunnableJeu {
-
-    public static final int TOUR_FINI = 1;
-    public static final int PARTIE_FINIE = 2;
     
     protected final List<Carte> deck;
     protected final List<Joueur> joueurs;
-    protected List<Class<Joueur>> typeDeJoueur;
-    protected HashMap<String, String> options;
     protected int nbCartesPourGagner;
     protected int gagnant;
     
     protected final TreeSet<Carte> cartesJouees;
     
-    private final Notifier notifier;
-    private RingBuffer<Integer> evenements;
+
+    private final RingBuffer<Integer> evenements;
 
     public Bataille() {
         this.joueurs = new ArrayList<>();
         this.deck = new LinkedList<>();
-        this.notifier = new Notifier();
         this.cartesJouees = new TreeSet<>();
-        this.init();
-    }
-
-    @Override
-    public void setOptions(HashMap<String, String> options) {
-        this.options = options;
+        this.evenements = new RingBuffer<>();
         this.init();
     }
 
     private void init() {
+        for (int i = 0 ;
+                 i < Integer.parseInt(getOption("nbJoueurs"));
+                 ++i ) {
+            try {
+                this.joueurs.add((Joueur) Class.forName("joueurs." + getOption("typeJoueur")).newInstance());
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                Logger.getLogger(Bataille.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        this.deck.addAll(chargerDeck(getOption("deck")));
         this.melanger();
         this.distribution();
     }
 
     protected void melanger() {
-        Collections.shuffle(deck, null);
+        Collections.shuffle(deck);
     }
 
     protected void distribution() {
@@ -179,6 +180,11 @@ public class Bataille extends AbstractRunnableJeu {
     @Override
     public List<Carte> cartesJoueur(int joueur) {
         return null;
+    }
+
+    @Override
+    public void onNotify(Integer event) {
+        evenements.add(event);
     }
 
 }

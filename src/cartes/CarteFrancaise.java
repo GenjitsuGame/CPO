@@ -14,8 +14,8 @@ import jeux.Carte;
  */
 public class CarteFrancaise extends CarteClassic {
 
-    public CarteFrancaise(String valeur, String type) {
-        super(valeur, type);
+    public CarteFrancaise(String type, String valeur) {
+        super(type, valeur);
     }
 
     @Override
