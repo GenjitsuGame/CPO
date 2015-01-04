@@ -1,0 +1,7 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}CPO - Cartes
+<#if licenseLast??>
+${licenseLast}
+</#if>

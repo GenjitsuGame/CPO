@@ -7,6 +7,9 @@ package jeux;
  *
  * @author Pascal Luttgens
  */
-public interface Carte {
+public interface Carte extends Comparable<Carte> {
     
+    String getType();
+    
+    String getValeur();
 }

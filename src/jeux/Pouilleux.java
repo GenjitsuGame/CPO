@@ -6,7 +6,6 @@
 
 package jeux;
 
-import cartes.CarteF;
 import java.util.ArrayList;
 
 /**
@@ -14,13 +13,13 @@ import java.util.ArrayList;
  * @author Adrien
  */
 public class Pouilleux {
-    private ArrayList<CarteF> paquet = new ArrayList<>();
-    private ArrayList<JoueurF> joueurs = new ArrayList<>();
+    private ArrayList<Carte> paquet = new ArrayList<>();
+    private ArrayList<Joueur> joueurs = new ArrayList<>();
     
     public Pouilleux(int n){
        assert(n>2 && n<8);
        for(int i = 0 ; i < n ; i++){
-           joueurs.add(new JoueurF());
+           joueurs.add(new Joueur());
        }
        initpaquet();
     }
@@ -39,7 +38,7 @@ public class Pouilleux {
         int i = 52/joueurs.size();
         for(int cpt=0;cpt < joueurs.size(); cpt++){
             for (j = 0 ; j < i ; j++){
-                joueurs.get(x).ajoutcarte(paquet.get(j));
+                joueurs.get(x).ajoutCarte(paquet.get(j));
             }
             x++;
         }

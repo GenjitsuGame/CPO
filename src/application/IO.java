@@ -1,7 +1,7 @@
 /*
  * CPO - Cartes
  */
-package jeux;
+package application;
 
 /**
  *
@@ -9,4 +9,5 @@ package jeux;
  */
 public interface IO {
     
+
 }

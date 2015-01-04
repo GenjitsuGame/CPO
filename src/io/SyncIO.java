@@ -5,19 +5,18 @@
  */
 package io;
 
-import application.IO;
-
 /**
  *
  * @author scalpa
  */
-public abstract class AbstractIO implements IO {
+public class SyncIO extends AbstractIO {
     
-    protected final Affichable jeu;
+    private InputHandler inputHandler;
 
-    public AbstractIO(Affichable jeu) {
-        this.jeu = jeu;
+    public SyncIO(Affichable jeu) {
+        super(jeu);
     }
+    
     
     
 }

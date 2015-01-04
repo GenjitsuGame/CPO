@@ -5,19 +5,10 @@
  */
 package io;
 
-import application.IO;
-
 /**
  *
  * @author scalpa
  */
-public abstract class AbstractIO implements IO {
-    
-    protected final Affichable jeu;
-
-    public AbstractIO(Affichable jeu) {
-        this.jeu = jeu;
-    }
-    
+public interface InputHandler {
     
 }

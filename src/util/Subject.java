@@ -3,21 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package io;
-
-import application.IO;
+package util;
 
 /**
  *
  * @author scalpa
  */
-public abstract class AbstractIO implements IO {
-    
-    protected final Affichable jeu;
+public interface Subject {
 
-    public AbstractIO(Affichable jeu) {
-        this.jeu = jeu;
-    }
-    
+    Notifier getNotifier();
     
 }

@@ -5,19 +5,17 @@
  */
 package io;
 
-import application.IO;
-
 /**
  *
  * @author scalpa
  */
-public abstract class AbstractIO implements IO {
-    
-    protected final Affichable jeu;
+public abstract class AbstractRunnableIO extends AbstractIO implements Runnable {
 
-    public AbstractIO(Affichable jeu) {
-        this.jeu = jeu;
+    private final Thread thread;
+
+    public AbstractRunnableIO(Affichable jeu) {
+        super(jeu);
+        this.thread = new Thread(this);
     }
-    
-    
+
 }

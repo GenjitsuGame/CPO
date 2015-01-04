@@ -6,8 +6,7 @@
 
 package jeux;
 
-import cartes.CarteF;
-import cartes.CarteN;
+
 import java.util.ArrayList;
 
 /**
@@ -20,8 +19,8 @@ import java.util.ArrayList;
  * jeux sept familles
  */
 public class SFamilles {
-    private ArrayList<CarteN> paquet = new ArrayList<>();
-    private ArrayList<JoueurB> joueurs = new ArrayList<>();
+    private ArrayList<Carte> paquet = new ArrayList<>();
+    private ArrayList<Joueur> joueurs = new ArrayList<>();
     
     public SFamilles(int n){
        assert(n>2 && n<6);
