@@ -5,6 +5,7 @@
  */
 package io;
 
+import evenements.EvenementJeu;
 import inputhandlers.InputHandlerFactory;
 import java.util.Arrays;
 import java.util.List;
@@ -16,44 +17,10 @@ import util.RingBuffer;
  *
  * @author scalpa
  */
-public class SimpleIO extends AbstractIO {
+public class SynchronizedIOImpl extends AbstractSynchronizedIO<Integer> {
 
-    private final Object verrou;
-
-    private final Notifier<String> notifier;
-
-    private final Thread threadAffichage;
-    private final RingBuffer<Integer> evenementsAffichage;
-
-    private final Thread threadInput;
-    private final RingBuffer<String> evenementsInput;
-
-    private final InputHandler inputHandler;
-
-    public SimpleIO(Jeu jeu) {
+    public SynchronizedIOImpl(Jeu jeu) {
         super(jeu);
-        this.verrou = new Object();
-        this.notifier = new Notifier();
-        this.inputHandler = InputHandlerFactory.getInstance("Bataille", jeu);
-        this.evenementsAffichage = new RingBuffer<>();
-        this.threadAffichage = new Thread(() -> {
-            while (true) {
-                Integer evenement = evenementsAffichage.get();
-                switchEvenementID(evenement);
-            }
-        });
-
-        this.evenementsInput = new RingBuffer<>();
-        this.threadInput = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                while (true) {
-                    inputHandler.traite(evenementsInput.get());
-                }
-            }
-        });
-        this.inputHandler.getNotifier().registerObserver(this);
     }
 
     @Override
@@ -77,27 +44,43 @@ public class SimpleIO extends AbstractIO {
         }
     }
 
-
     @Override
-    protected void coupIllegal() {
-        System.out.println("Coup Illegal");
+    protected void traiteEvenement(Integer evenement) {
+        switch (evenement) {
+            case EvenementJeu.ID.DEBUT_PARTIE:
+                this.debutPartie();
+                break;
+            case EvenementJeu.ID.COUP_ILLEGAL:
+                this.coupIllegal();
+                break;
+            case EvenementJeu.ID.FIN_TOUR:
+                this.finTour();
+                break;
+            case EvenementJeu.ID.FIN_PARTIE:
+                this.finPartie();
+                break;
+        }
     }
 
-    @Override
+    protected void coupIllegal() {
+        System.out.println("COUP ILLEGAL");
+    }
+
     protected void finPartie() {
         System.out.println("PARTIE FINIE");
         System.out.println(Arrays.toString(jeu.getGagnantPartie()));
     }
 
-    @Override
     protected void debutPartie() {
         System.out.println("DEBUT PARTIE");
     }
 
-    @Override
     protected void finTour() {
         System.out.println(Arrays.toString(jeu.getGagnantTour()));
         System.out.println("TOUR FINI");
     }
 
+    protected void idInconnue() {
+        System.out.println("JOUEUR INCONNU");
+    }
 }

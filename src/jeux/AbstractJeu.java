@@ -33,10 +33,7 @@ public abstract class AbstractJeu implements Jeu {
     protected static final HashMap<String, String> OPTIONS_PAR_DEFAUT = new HashMap<>();
     protected final HashMap<String, String> options;
 
-    protected final Notifier notifier;
-
     public AbstractJeu() {
-        this.notifier = new Notifier();
         this.options = new HashMap<>();
         JSONObject jsono = JSONUtil.getJSONObjectFromFile(new File(CHEMIN_CONFIG + this.getClass().getSimpleName() + ".cfg"));
         Iterator<String> it = jsono.keys();
@@ -54,11 +51,6 @@ public abstract class AbstractJeu implements Jeu {
     @Override
     public void setOption(String nom, String valeur) {
         this.options.put(nom, valeur);
-    }
-
-    @Override
-    public Notifier getNotifier() {
-        return this.notifier;
     }
     
     protected LinkedList<Carte> chargerDeck(String chemin) {

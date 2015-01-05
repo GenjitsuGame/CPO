@@ -5,6 +5,7 @@
  */
 package inputhandlers;
 
+import evenements.EvenementJeu;
 import io.Jeu;
 import java.util.HashSet;
 import jeux.Bataille;
@@ -26,9 +27,14 @@ public class BatailleInputHandler extends AbstractInputHandler<Bataille> {
         while (true) {
             Integer joueur = Integer.parseInt(evenements.get());
             if (ayantJoue.contains(joueur)) {
-                notifier.notifyObservers(Jeu.COUP_ILLEGAL);
+                notifier.notifyObservers(EvenementJeu.ID.COUP_ILLEGAL);
                 continue;
             }
+            if (joueur >= jeu.getNbJoueurs()) {
+                notifier.notifyObservers(EvenementJeu.ID.ID_INCONNUE);
+                continue;
+            }
+            
             ayantJoue.add(joueur);
             this.jeu.onNotify(joueur);
             if (ayantJoue.size() == this.jeu.getNbJoueurs()) {

@@ -5,6 +5,7 @@
  */
 package jeux;
 
+import evenements.EvenementJeu;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -21,7 +22,7 @@ import util.RingBuffer;
  *
  * @author Adrien
  */
-public class Bataille extends AbstractRunnableJeu {
+public class Bataille extends AbstractSynchronizedJeu<Integer> {
 
     protected final Object verrou;
 
@@ -58,7 +59,7 @@ public class Bataille extends AbstractRunnableJeu {
             }
         }
         this.deck.addAll(chargerDeck(getOption("deck")));
-        this.nbCartesPourGagner = 6; //this.deck.size();
+        this.nbCartesPourGagner = this.deck.size();
         this.melanger();
         this.distribution();
     }
@@ -72,7 +73,7 @@ public class Bataille extends AbstractRunnableJeu {
         int reste = deck.size() % joueurs.size();
 
         for (int i = 0; i < joueurs.size(); ++i) {
-            for (int j = 0; j < 3; ++j) {
+            for (int j = 0; j < nbCartesParJoueur; ++j) {
                 joueurs.get(i).ajouterCarte(deck.remove(0));
             }
         }
@@ -129,7 +130,7 @@ public class Bataille extends AbstractRunnableJeu {
                         this.joueurs.get(this.gagnantTour).ajouterCarte(carteGagnee);
                     }
 
-                    this.notifier.notifyObservers(Bataille.FIN_TOUR);
+                    this.notifier.notifyObservers(EvenementJeu.ID.FIN_TOUR);
 
                     try {
                         this.verrou.wait();
@@ -141,7 +142,7 @@ public class Bataille extends AbstractRunnableJeu {
                     this.cartesJoueesTriees.clear();
 
                     if ((this.gagnantPartie = this.checkGagnantPartie()) >= 0) {
-                        this.notifier.notifyObservers(FIN_PARTIE);
+                        this.notifier.notifyObservers(EvenementJeu.ID.FIN_PARTIE);
                         break;
                     }
 

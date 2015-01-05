@@ -13,13 +13,7 @@ import util.Subject;
  *
  * @author scalpa
  */
-public interface Jeu extends Subject, Observer<Integer> {
-
-        
-    public static final int FIN_TOUR = 1000;
-    public static final int FIN_PARTIE = 1001;
-    public static final int DEBUT_PARTIE = 1002;
-    public static final int COUP_ILLEGAL = 2000;
+public interface Jeu {
     
     public void setOption(String option, String valeur);
     

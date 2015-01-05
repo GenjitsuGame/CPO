@@ -4,7 +4,7 @@
 package application;
 
 import io.BatailleIO;
-import io.SimpleIO;
+import io.SynchronizedIOImpl;
 import jeux.Bataille;
 
 /**
