@@ -18,7 +18,7 @@ public abstract class EvenementJeu extends EventObject {
         FIN_TOUR,
         FIN_PARTIE,
         DEBUT_PARTIE,
-        OUP_ILLEGAL,
+        COUP_ILLEGAL,
         ID_INCONNUE
     }
 

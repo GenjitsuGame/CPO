@@ -6,25 +6,21 @@
 package io;
 
 import evenements.EvenementJeu;
-import inputhandlers.InputHandlerFactory;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
-import util.Notifier;
-import util.RingBuffer;
 
 /**
  *
  * @author scalpa
  */
-public class SynchronizedIOImpl extends AbstractSynchronizedIO<Integer> {
+public class SynchronizedIOImpl extends AbstractSynchronizedIO<EvenementJeu.ID> {
 
     public SynchronizedIOImpl(Jeu jeu) {
         super(jeu);
     }
 
     @Override
-    public final void onNotify(Integer event) {
+    public final void onNotify(EvenementJeu.ID event) {
         this.evenementsAffichage.add(event);
     }
 
@@ -45,19 +41,22 @@ public class SynchronizedIOImpl extends AbstractSynchronizedIO<Integer> {
     }
 
     @Override
-    protected void traiteEvenement(Integer evenement) {
+    protected void traiteEvenement(EvenementJeu.ID evenement) {
         switch (evenement) {
-            case EvenementJeu.ID.DEBUT_PARTIE:
+            case DEBUT_PARTIE:
                 this.debutPartie();
                 break;
-            case EvenementJeu.ID.COUP_ILLEGAL:
+            case COUP_ILLEGAL:
                 this.coupIllegal();
                 break;
-            case EvenementJeu.ID.FIN_TOUR:
+            case FIN_TOUR:
                 this.finTour();
                 break;
-            case EvenementJeu.ID.FIN_PARTIE:
+            case FIN_PARTIE:
                 this.finPartie();
+                break;
+            case ID_INCONNUE:
+                this.idInconnue();
                 break;
         }
     }

@@ -15,12 +15,12 @@ import util.RingBuffer;
  * @author Pascal luttgens
  * @param <T>
  */
-public abstract class AbstractInputHandler<T extends Jeu> implements InputHandler, Runnable {
+public abstract class AbstractInputHandler<T extends Jeu, U> implements InputHandler, Runnable {
 
     protected final T jeu;
     protected final RingBuffer<String> evenements;
     private final Thread thread;
-    protected final Notifier<Integer> notifier;
+    protected final Notifier<U> notifier;
 
     public AbstractInputHandler(Jeu jeu) {
         this.thread = new Thread(this);
