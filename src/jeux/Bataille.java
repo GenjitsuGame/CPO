@@ -58,7 +58,7 @@ public class Bataille extends AbstractRunnableJeu {
             }
         }
         this.deck.addAll(chargerDeck(getOption("deck")));
-        this.nbCartesPourGagner = this.deck.size();
+        this.nbCartesPourGagner = 6; //this.deck.size();
         this.melanger();
         this.distribution();
     }
@@ -72,7 +72,7 @@ public class Bataille extends AbstractRunnableJeu {
         int reste = deck.size() % joueurs.size();
 
         for (int i = 0; i < joueurs.size(); ++i) {
-            for (int j = 0; j < nbCartesParJoueur; ++j) {
+            for (int j = 0; j < 3; ++j) {
                 joueurs.get(i).ajouterCarte(deck.remove(0));
             }
         }
@@ -245,7 +245,9 @@ public class Bataille extends AbstractRunnableJeu {
     public List<List<String>> cartesJoueesCeTour() {
         synchronized (this.verrou) {
             ArrayList<List<String>> ret = new ArrayList<>();
-            for (Carte carte : cartesJoueesTriees) {
+            Iterator<Carte> it = cartesJoueesParJoueur.values().iterator();
+            while (it.hasNext()) {
+                Carte carte = it.next();
                 ArrayList<String> temp = new ArrayList<>();
                 temp.add(carte.toString());
                 ret.add(temp);

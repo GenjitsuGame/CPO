@@ -23,14 +23,9 @@ public class JoueurDeckInv extends AbstractJoueur {
         this.deck = new LinkedList<>();
     }
 
-    private void retirercarte() {
-        deck.remove(0);
-    }
-
     @Override
     public Carte getCarte() {
-        this.retirercarte();
-        return deck.get(0);
+        return deck.remove(0);
     }
 
     @Override
