@@ -15,45 +15,21 @@ import java.util.List;
  *
  * Joueur classique
  */
-public class JoueurDeckInv extends AbstractJoueur {
-
-    protected List<Carte> deck;
-    
-    public JoueurDeckInv() {
-        this.deck = new LinkedList<>();
-    }
-
-    @Override
-    public Carte getCarte() {
-        return deck.remove(0);
-    }
-
-    @Override
-    public Carte getCarte(int i) {
-        try {
-            return deck.get(i);
-        } catch (IndexOutOfBoundsException e) {
-            throw new IllegalArgumentException("L'indice " + i + " ne reference aucune carte de la main de joueur.", e);
-        }
-    }
-
-    @Override
-    public void ajouterCarte(Carte carte) {
-        deck.add(carte);
-    }
-
-    @Override
-    public int getNbCartesDeck() {
-        return this.deck.size();
-    }
-
-    @Override
-    public boolean sansCarte() {
-        return this.deck.isEmpty();
-    }
+public class JoueurDeckInv extends JoueurUnPaquet {
 
     @Override
     public int getNbCartesMain() {
         throw new UnsupportedOperationException("Le type de joueur "+ this.getClass().getSimpleName() + "ne possède pas de main"); 
     }
+
+    @Override
+    public Carte consulterCarte(int i) {
+        throw new UnsupportedOperationException("Impossible de consulter une carte d'un joueur ayant un deck caché.");
+    }
+
+    @Override
+    public List<Carte> getMain() {
+        throw new UnsupportedOperationException("Le type de joueur "+ this.getClass().getSimpleName() + "ne possède pas de main");
+    }
+    
 }

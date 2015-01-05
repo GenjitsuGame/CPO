@@ -14,7 +14,7 @@ import jeux.Bataille;
  *
  * @author Pascal Luttgens
  */
-public class BatailleInputHandler extends AbstractInputHandler<Bataille, EvenementJeu.ID> {
+public class BatailleInputHandler extends AbstractInputHandler<Bataille, Integer> {
     
     protected HashSet<Integer> ayantJoue = new HashSet<>();
     

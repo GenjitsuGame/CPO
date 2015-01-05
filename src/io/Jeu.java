@@ -19,9 +19,11 @@ public interface Jeu {
     
     public void commencer();
     
-    public int[] getGagnantPartie();
+    public List<Integer> getGagnantPartie();
     
-    public int[] getGagnantTour();
+    public List<Integer> getGagnantTour();
+    
+    public List<Integer> getPerdantPartie();
     
     public int getNbJoueurs();
     
@@ -38,4 +40,8 @@ public interface Jeu {
     public List<String> cartesJoueur(int joueur);
     
     public List<List<String>> cartesJoueesCeTour();
+    
+    public List<String> getPli();
+    
+    public void reprendre();
 }

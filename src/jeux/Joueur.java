@@ -3,6 +3,8 @@
  */
 package jeux;
 
+import java.util.List;
+
 
 /**
  *
@@ -16,11 +18,16 @@ public interface Joueur {
     
     public void ajouterCarte(Carte carte);
     
+    public void ajouterCartes(List<Carte> cartes);
+    
     public int getNbCartesMain();
     
     public int getNbCartesDeck();
     
     public boolean sansCarte();
     
+    public Carte consulterCarte(int i);
+    
+    public List<Carte> getMain();
     
 }

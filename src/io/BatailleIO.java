@@ -5,6 +5,9 @@
  */
 package io;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author scalpa
@@ -17,13 +20,25 @@ public class BatailleIO extends SynchronizedIOImpl {
 
     @Override
     protected void coupIllegal() {
-        System.out.println("Ce joueur a deja joue.");
+        System.out.println("Ce joueur ne peut pas jouer.");
     }
-    
+
     @Override
     protected void finTour() {
         System.out.println(jeu.cartesJoueesCeTour());
-        super.finTour();
+        if (!jeu.getGagnantTour().isEmpty()) {
+            System.out.println("Le joueur  " + jeu.getGagnantTour().get(0) + " remporte : ");
+            List<String> cartesRemportees = new ArrayList<>();
+            if (!jeu.getPli().isEmpty()) {
+                cartesRemportees.addAll(jeu.getPli());
+            }
+            for (List<String> cartes : jeu.cartesJoueesCeTour()) {
+                cartesRemportees.addAll(cartes);
+            }
+            System.out.println(cartesRemportees);
+        }
+        System.out.println("TOUR FINI");
+        this.jeu.reprendre();
     }
-    
+
 }

@@ -5,21 +5,22 @@
  */
 package io;
 
+import evenements.EvenementJeu;
+
 /**
  *
  * @author scalpa
- * @param <T>
  */
-public class SynchronizedIOImpl extends AbstractSynchronizedIO<Integer> {
+public class PouilleuxIO extends AbstractSynchronizedIO<EvenementJeu> {
 
-    public SynchronizedIOImpl(Jeu jeu) {
+    public PouilleuxIO(Jeu jeu) {
         super(jeu);
     }
 
     @Override
-    protected void traiteEvenement(Integer evenement) {
-        this.switchEvenementID(evenement);
+    protected void traiteEvenement(EvenementJeu evenement) {
+        switchEvenementID(evenement.getID());
     }
 
-
+    
 }

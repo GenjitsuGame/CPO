@@ -6,6 +6,7 @@
 package jeux;
 
 import evenements.EvenementJeu;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -15,7 +16,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import util.RingBuffer;
 
 /**
  *
@@ -23,31 +23,31 @@ import util.RingBuffer;
  */
 public class Bataille extends AbstractSynchronizedJeu<Integer> {
 
-    protected final Object verrou;
-
     protected final List<Carte> deck;
     protected final List<Joueur> joueurs;
-    protected int nbCartesPourGagner;
+    protected final List<Carte> pli;
+    protected final List<Integer> perdants;
 
-    protected int gagnantPartie = -1;
-    protected int gagnantTour = -1;
+    protected int nbCartesPourGagner;
+    protected final List<Integer> gagnantPartie;
+    protected final List<Integer> gagnantTour;
 
     protected final TreeMap<Integer, Carte> cartesJoueesParJoueur;
     protected final List<Carte> cartesJoueesTriees;
 
-    private final RingBuffer<Integer> evenements;
-
     public Bataille() {
-        this.verrou = new Object();
         this.joueurs = new ArrayList<>();
+        this.perdants = new ArrayList<>();
+        this.gagnantPartie = new ArrayList<>();
+        this.gagnantTour = new ArrayList<>();
         this.deck = new LinkedList<>();
-        this.evenements = new RingBuffer<>();
+        this.pli = new ArrayList<>();
         this.cartesJoueesParJoueur = new TreeMap<>();
         this.cartesJoueesTriees = new ArrayList<>();
         this.init();
     }
 
-    private void init() {
+    protected void init() {
         for (int i = 0;
                 i < Integer.parseInt(getOption("nbJoueurs"));
                 ++i) {
@@ -85,12 +85,7 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
 
     }
 
-    @Override
-    public void commencer() {
-        this.start();
-    }
-
-    private int checkGagnantPartie() {
+    protected int checkGagnantPartie() {
         synchronized (this.verrou) {
             for (int i = 0; i < joueurs.size(); ++i) {
                 if (joueurs.get(i).getNbCartesDeck() == nbCartesPourGagner) {
@@ -103,11 +98,18 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
 
     @Override
     public void run() {
-        while (true) {
-            synchronized (this.verrou) {
+        synchronized (this.verrou) {
+            this.notifier.notifyObservers(EvenementJeu.ID.DEBUT_PARTIE);
+            while (true) {
+
                 int joueurActuel = this.evenements.get();
                 if (this.cartesJoueesParJoueur.containsKey(joueurActuel)) {
                     throw new IllegalArgumentException("Le joueur " + joueurActuel + " a deja joue.");
+                }
+
+                if (estPerdant(joueurActuel)) {
+                    this.notifier.notifyObservers(EvenementJeu.ID.COUP_ILLEGAL);
+                    continue;
                 }
 
                 Carte carte = this.joueurs.get(joueurActuel).getCarte();
@@ -121,12 +123,14 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
                 if (this.cartesJoueesParJoueur.size() == this.joueurs.size()) {
 
                     this.trierCartesJouees();
-                    this.setGagnantTour();
-
-                    Iterator<Carte> it = cartesJoueesParJoueur.values().iterator();
-                    while (it.hasNext()) {
-                        Carte carteGagnee = it.next();
-                        this.joueurs.get(this.gagnantTour).ajouterCarte(carteGagnee);
+                    if (this.checkTourNul()) {
+                        this.pli.addAll(this.cartesJoueesTriees);
+                    } else {
+                        this.setGagnantTour();
+                        this.joueurs.get(this.gagnantTour.get(0)).ajouterCartes(cartesJoueesTriees);
+                        if (!this.pli.isEmpty()) {
+                            this.joueurs.get(this.gagnantTour.get(0)).ajouterCartes(this.pli);
+                        }
                     }
 
                     this.notifier.notifyObservers(EvenementJeu.ID.FIN_TOUR);
@@ -137,14 +141,18 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
                         Logger.getLogger(Bataille.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
+                    if (!this.gagnantTour.isEmpty()) {
+                        pli.clear();
+                    }
+
+                    this.gagnantTour.clear();
                     this.cartesJoueesParJoueur.clear();
                     this.cartesJoueesTriees.clear();
 
-                    if ((this.gagnantPartie = this.checkGagnantPartie()) >= 0) {
+                    if (!this.gagnantPartie.isEmpty()) {
                         this.notifier.notifyObservers(EvenementJeu.ID.FIN_PARTIE);
                         break;
                     }
-
                 }
             }
 
@@ -153,12 +161,26 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
     }
 
     @Override
-    public int[] getGagnantTour() {
+    public List<Integer> getGagnantTour() {
         synchronized (this.verrou) {
-            int[] ret = {this.gagnantTour};
-            this.verrou.notifyAll();
-            return ret;
+            return this.gagnantTour;
         }
+    }
+
+    protected boolean estPerdant(int joueur) {
+        return this.perdants.contains(joueur);
+    }
+
+    protected boolean checkPerdant() {
+        boolean ret = false;
+        for (int i = 0; i < this.joueurs.size(); ++i) {
+            if (this.joueurs.get(i).getNbCartesDeck() == 0) {
+                this.perdants.add(i);
+                this.notifier.notifyObservers(EvenementJeu.ID.NOUVEAU_PERDANT);
+                ret = true;
+            }
+        }
+        return ret;
     }
 
     protected void setGagnantTour() {
@@ -167,30 +189,21 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
             Carte value = entrySet.getValue();
 
             if (value.equals(cartesJoueesTriees.get(cartesJoueesTriees.size() - 1))) {
-                this.gagnantTour = key;
+                this.gagnantTour.add(key);
             }
         }
     }
 
     @Override
-    public int[] getGagnantPartie() {
+    public List<Integer> getGagnantPartie() {
         synchronized (this.verrou) {
-            if (gagnantPartie < 0) {
+            if (this.gagnantPartie.isEmpty()) {
                 throw new IllegalStateException("La partie n'est pas finie");
             } else {
-                int[] ret = {gagnantPartie};
+                List<Integer> ret = new ArrayList<>();
+                ret.add(this.gagnantPartie.get(0));
                 return ret;
             }
-        }
-    }
-
-    @Override
-    protected void recevoirInput(Object indexJoueur) {
-        try {
-            Integer evenement = (Integer) indexJoueur;
-
-        } catch (ClassCastException e) {
-            throw new IllegalArgumentException("L'input n'a pas pu etre traite : " + e.getMessage(), e);
         }
     }
 
@@ -229,16 +242,22 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
         return null;
     }
 
-    @Override
-    public void onNotify(Integer event) {
-        evenements.add(event);
+    protected void trierCartesJouees() {
+        for (Map.Entry<Integer, Carte> entry : this.cartesJoueesParJoueur.entrySet()) {
+            this.cartesJoueesTriees.add(entry.getValue());
+        }
+        Collections.sort(this.cartesJoueesTriees);
     }
 
-    private void trierCartesJouees() {
-        for (Map.Entry<Integer, Carte> entry : cartesJoueesParJoueur.entrySet()) {
-            cartesJoueesTriees.add(entry.getValue());
+    protected boolean checkTourNul() {
+        Carte carte = this.cartesJoueesTriees.get(0);
+        for (int i = 1; i < this.joueurs.size(); ++i) {
+            if (!carte.getValeur().equals(this.cartesJoueesTriees.get(i).getValeur())) {
+                return false;
+            }
         }
-        Collections.sort(cartesJoueesTriees);
+        this.notifier.notifyObservers(EvenementJeu.ID.TOUR_NUL);
+        return true;
     }
 
     @Override
@@ -255,4 +274,21 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
             return ret;
         }
     }
+
+    @Override
+    public List<Integer> getPerdantPartie() {
+        return this.perdants;
+    }
+
+    @Override
+    public List<String> getPli() {
+        synchronized (this.verrou) {
+            ArrayList<String> ret = new ArrayList<>();
+            for (Carte carte : this.pli) {
+                ret.add(carte.toString());
+            }
+            return ret;
+        }
+    }
+
 }

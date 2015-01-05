@@ -10,20 +10,46 @@ import java.util.EventObject;
 /**
  *
  * @author scalpa
+ * @param <T>
  */
-public abstract class EvenementJeu extends EventObject {
+public class EvenementJeu<T> extends EventObject {
 
-    public static enum ID {
+    private static int eventID = 1000;
+    private final static Object verrou = new Object();
 
-        FIN_TOUR,
-        FIN_PARTIE,
-        DEBUT_PARTIE,
-        COUP_ILLEGAL,
-        ID_INCONNUE
+    protected final static int setID() {
+        synchronized (verrou) {
+            return eventID++;
+        }
     }
 
-    public EvenementJeu(Object o) {
+    public static class ID {
+
+        public final static int FIN_TOUR = setID();
+        public final static int FIN_PARTIE = setID();
+        public final static int DEBUT_PARTIE = setID();
+        public final static int COUP_ILLEGAL = setID();
+        public final static int ID_INCONNUE = setID();
+        public final static int PIOCHE_CARTE = setID();
+        public final static int NOUVEAU_GAGNANT = setID();
+        public final static int TOUR_NUL = setID();
+        public final static int NOUVEAU_PERDANT = setID();
+    }
+
+    private final int idEvenement;
+    private final T[] object;
+
+    public EvenementJeu(Object o, int idEvenement, T... object) {
         super(o);
+        this.idEvenement = idEvenement;
+        this.object = object;
     }
-
+    
+    public final int getID() {
+        return this.idEvenement;
+    }
+    
+    public final T[] getObject() {
+        return this.object;
+    }
 }

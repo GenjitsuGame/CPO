@@ -3,6 +3,8 @@
  */
 package application;
 
+import evenements.EvenementCartes;
+import evenements.EvenementJeu;
 import io.BatailleIO;
 import io.SynchronizedIOImpl;
 import jeux.Bataille;
@@ -13,6 +15,8 @@ import jeux.Bataille;
  */
 public class Main {
     public static void main(String[] args) {
+        EvenementJeu.ID lel = new EvenementJeu.ID();
+        EvenementCartes.ID e = new EvenementCartes.ID();
         IO io = new BatailleIO(new Bataille());
         io.start();
         while (true) {            

@@ -5,42 +5,25 @@
  */
 package joueurs;
 
+import java.util.Random;
 import jeux.Carte;
 
 /**
  *
  * @author scalpa
  */
-public class JoueurMain extends AbstractJoueur {
+public class JoueurMain extends JoueurUnPaquet {
 
     @Override
     public Carte getCarte() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Carte getCarte(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void ajouterCarte(Carte carte) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int getNbCartesMain() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Random r = new Random();
+        int indice = r.nextInt(cartes.size() - 1);
+        return cartes.remove(indice);
     }
 
     @Override
     public int getNbCartesDeck() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean sansCarte() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Le type de joueur " + this.getClass().getSimpleName() + "ne possède pas de deck");
     }
     
     
