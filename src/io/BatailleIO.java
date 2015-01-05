@@ -14,15 +14,23 @@ import java.util.List;
  */
 public class BatailleIO extends SynchronizedIOImpl {
 
+    /**
+     * Constructeur BatailleIO
+     * @param jeu 
+     */
     public BatailleIO(Jeu jeu) {
         super(jeu);
     }
 
+    
     @Override
     protected void coupIllegal() {
         System.out.println("Ce joueur ne peut pas jouer.");
     }
 
+    /**
+     * Simulation d'un tour au jeu de la Bataille
+     */
     @Override
     protected void finTour() {
         System.out.println(jeu.cartesJoueesCeTour());

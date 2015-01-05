@@ -14,10 +14,20 @@ import jeux.Carte;
  */
 public class CarteFrancaise extends CarteClassic {
 
+    /**
+     * Constructeur CarteFrancaise
+     * @param type
+     * @param valeur 
+     */
     public CarteFrancaise(String type, String valeur) {
         super(type, valeur);
     }
 
+    /**
+     * Compare cette carte a une autre
+     * @param c
+     * @return 
+     */
     @Override
     public int compareTo(Carte c) {
         Integer thisValeur = valeurs.get(this.getValeur());

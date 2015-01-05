@@ -35,6 +35,9 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
     protected final TreeMap<Integer, Carte> cartesJoueesParJoueur;
     protected final List<Carte> cartesJoueesTriees;
 
+    /**
+     * Constructeur Bataille
+     */
     public Bataille() {
         this.joueurs = new ArrayList<>();
         this.perdants = new ArrayList<>();
@@ -47,6 +50,9 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
         this.init();
     }
 
+    /**
+     * initalisation d'une partie : nombre de joueurs, distribution
+     */
     protected void init() {
         for (int i = 0;
                 i < Integer.parseInt(getOption("nbJoueurs"));
@@ -63,10 +69,16 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
         this.distribution();
     }
 
+    /**
+     * Melange le deck initial
+     */
     protected void melanger() {
         Collections.shuffle(deck);
     }
 
+    /**
+     * Distribution des cartes aux n joueurs
+     */
     protected void distribution() {
         int nbCartesParJoueur = deck.size() / joueurs.size();
         int reste = deck.size() % joueurs.size();
@@ -85,6 +97,10 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
 
     }
 
+    /**
+     * Retourne l'indice du joueur gagnant
+     * @return i ou -1
+     */
     protected int checkGagnantPartie() {
         synchronized (this.verrou) {
             for (int i = 0; i < joueurs.size(); ++i) {
@@ -207,6 +223,10 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
         }
     }
 
+    /**
+     * Retourne le nombre de joueurs dans la partie
+     * @return le nombre de joueurs
+     */
     @Override
     public int getNbJoueurs() {
         return joueurs.size();
@@ -217,11 +237,21 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
         return false;
     }
 
+     /**
+     * Retourne le nombre de carte dans le deck du joueur
+     * @param joueur
+     * @return le nombre de carte du joueur
+     */
     @Override
     public int tailleMain(int joueur) {
         throw new UnsupportedOperationException("Les joueurs ne possèdent pas de main dans la bataille.");
     }
 
+    /**
+     * Retourne la taille du deck du joueur
+     * @param joueur
+     * @return taille du deck
+     */
     @Override
     public int tailleDeckJoueur(int joueur) {
         return this.joueurs.get(joueur).getNbCartesDeck();
@@ -275,11 +305,15 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
         }
     }
 
+    /**
+     * Retourne la liste des perdants
+     * @return perdants
+     */
     @Override
     public List<Integer> getPerdantPartie() {
         return this.perdants;
     }
-
+    
     @Override
     public List<String> getPli() {
         synchronized (this.verrou) {

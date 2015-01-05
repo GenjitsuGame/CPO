@@ -12,6 +12,10 @@ package io;
  */
 public class SynchronizedIOImpl extends AbstractSynchronizedIO<Integer> {
 
+    /**
+     * Constructeur SynchronizedIOImpl
+     * @param jeu 
+     */
     public SynchronizedIOImpl(Jeu jeu) {
         super(jeu);
     }

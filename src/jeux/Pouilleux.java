@@ -28,6 +28,9 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
     protected int tour;
     protected int nbJoueursEnJeu;
 
+    /**
+     * Constructeur Pouilleux
+     */
     public Pouilleux() {
         this.deck = new LinkedList<>();
         this.joueurs = new ArrayList<>();
@@ -35,6 +38,9 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
         this.gagnants = new ArrayList<>();
     }
 
+    /**
+     * Initialise un jeu du Pouilleux : nombre de joueurs, distribution , défausse
+     */
     protected void init() {
         for (int i = 0;
                 i < Integer.parseInt(getOption("nbJoueurs"));
@@ -57,10 +63,16 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
         this.defausse();
     }
 
+    /**
+     * Melange le deck initial
+     */
     protected void melanger() {
         Collections.shuffle(this.deck);
     }
 
+    /**
+     * Distribution des cartes aux n joueurs
+     */
     protected void distribution() {
         int nbCartesParJoueur = deck.size() / joueurs.size();
         int reste = deck.size() % joueurs.size();
@@ -78,6 +90,9 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
         }
     }
 
+    /**
+     * Appel une fonction pour défausser les paires de chacune des mains des joueurs
+     */
     protected void defausse() {
         for (Joueur joueur : joueurs) {
             List<Carte> mainJoueur = joueur.getMain();
@@ -85,6 +100,12 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
         }
     }
 
+    /**
+     * Compare la parité entre deux carte
+     * @param c1
+     * @param c2
+     * @return vrai si c1 et c2 sont des doublons
+     */
     protected boolean estDoublon(Carte c1, Carte c2) {
         for (String doubleType : doublesList) {
             if (doubleType.contains(c1.getType()) && doubleType.contains(c2.getType())) {
@@ -94,6 +115,11 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
         return false;
     }
 
+    /**
+     * Retire les doublons d'un deck
+     * @param main
+     * @return vrai si le defaussage est effectué
+     */
     protected boolean retirerDoubles(final List<Carte> main) {
         ArrayList<Carte> nouvelleMain = new ArrayList<>();
         ArrayList<Carte> doublesARetirer = new ArrayList<>();
@@ -123,6 +149,10 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
         return true;
     }
 
+    /**
+     * Retourne le nombre de joueurs dans la partie
+     * @return le nombre de joueurs
+     */
     @Override
     public int getNbJoueurs() {
         return this.joueurs.size();
@@ -133,16 +163,26 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
         return true;
     }
 
+    /**
+     * Retourne le nombre de carte dans le deck du joueur
+     * @param joueur
+     * @return le nombre de carte du joueur
+     */
     @Override
     public int tailleMain(int joueur) {
         return this.joueurs.get(joueur).getNbCartesMain();
     }
+
 
     @Override
     public int tailleDeckJoueur(int joueur) {
         return 0;
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public int tailleDeckJeu() {
         return 0;
@@ -153,6 +193,11 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
         throw new UnsupportedOperationException("Il n'y pas de fausse dans le pouilleux"); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Retourne le deck d'un joueur
+     * @param joueur
+     * @return la liste des cartes d'un joueur
+     */
     @Override
     public List<String> cartesJoueur(int joueur) {
         List<String> ret = new ArrayList<>();
@@ -162,6 +207,10 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
         return ret;
     }
 
+    /**
+     * Retourne un deck des cartes jouees à ce tour
+     * @return la liste des cartes jouees à ce tour
+     */
     @Override
     public List<List<String>> cartesJoueesCeTour() {
         List<List<String>> ret = new ArrayList<>();
@@ -170,7 +219,7 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
         ret.add(ret2);
         return ret;
     }
-
+    
     @Override
     public void run() {
         while (true) {
@@ -209,7 +258,12 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
             }
         }
     }
-
+    
+    /**
+     * Regarde si le joueur est gagnant 
+     * @param joueur
+     * @return vrai si joueur n'a plus de carte dans son deck
+     */
     protected boolean checkGagnant(int joueur) {
         if (this.joueurs.get(joueur).sansCarte()) {
             gagnants.add(joueur);
@@ -219,6 +273,11 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
         return false;
     }
 
+    /**
+     * Recherche l'indice du prochain joueur à jouer
+     * @param joueurCourant
+     * @return indice du prochain joueur
+     */
     protected int getIndiceProchainJoueur(int joueurCourant) {
         if (joueurCourant >= this.joueurs.size() || joueurCourant < 0) {
             throw new IllegalArgumentException("Joueur courant inconnu.");
@@ -234,6 +293,10 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
         throw new IllegalStateException("Aucun prochain joueur trouve.");
     }
 
+    /**
+     * Regarde si la dernière carte en jeu est la perdante et finit le jeu
+     * @param perdant 
+     */
     protected void finirPartie(int perdant) {
         Carte derniere = this.joueurs.get(perdant).consulterCarte(0);
         if (!(derniere.getType().equals(this.getOption("carteRetireeType")) && derniere.getValeur().equals(this.getOption("carteRetireeValeur")))) {
@@ -242,16 +305,28 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
         this.gagnants.add(perdant);
     }
 
+    /**
+     * Retourne les gagnants de la partie
+     * @return la liste des gagnants
+     */
     @Override
     public List<Integer> getGagnantPartie() {
         return this.gagnants;
     }
 
+    /**
+     * Retourne les tours auxquels les gagnants ont finit 
+     * @return la liste "des tours gagnants"
+     */
     @Override
     public List<Integer> getGagnantTour() {
         throw new UnsupportedOperationException("il n'y a pas de gagnant à chaque tour au pouilleux"); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public List<Integer> getPerdantPartie() {
         if (this.gagnants.size() != this.joueurs.size()) {

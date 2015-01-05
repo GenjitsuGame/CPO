@@ -13,6 +13,10 @@ import evenements.EvenementJeu;
  */
 public class PouilleuxIO extends AbstractSynchronizedIO<EvenementJeu> {
 
+    /**
+     * Constructeur PouilleuxIO
+     * @param jeu 
+     */
     public PouilleuxIO(Jeu jeu) {
         super(jeu);
     }

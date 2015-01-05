@@ -34,6 +34,9 @@ public abstract class AbstractJeu implements Jeu {
     protected static final HashMap<String, String> OPTIONS_PAR_DEFAUT = new HashMap<>();
     protected final HashMap<String, String> options;
 
+    /**
+     * Constructeur AbstractJeu()
+     */
     public AbstractJeu() {
         this.options = new HashMap<>();
         JSONObject jsono = JSONUtil.getJSONObjectFromFile(new File(CHEMIN_CONFIG + this.getClass().getSimpleName() + ".cfg"));
@@ -44,6 +47,7 @@ public abstract class AbstractJeu implements Jeu {
             OPTIONS_PAR_DEFAUT.put(key, value);
         }
     }
+    
     
     protected String getOption (String nomOption) {
         return ((options.get(nomOption) == null) ? OPTIONS_PAR_DEFAUT.get(nomOption) : options.get(nomOption));

@@ -11,6 +11,12 @@ package evenements;
  */
 public class EvenementCartes extends EvenementJeu<String> {
 
+    /**
+     * Constructeur EvenementCartes
+     * @param o
+     * @param idEvenement
+     * @param object 
+     */
     public EvenementCartes(Object o, int idEvenement, String... object) {
         super(o, idEvenement, object);
     }

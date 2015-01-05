@@ -25,6 +25,9 @@ public abstract class AbstractSynchronizedJeu<T> extends AbstractJeu implements 
 
     private final Thread thread;
 
+    /**
+     * Constructeur AbstractSynchronizedJeu
+     */
     public AbstractSynchronizedJeu() {
         this.verrou = new Object();
         this.notifier = new Notifier();

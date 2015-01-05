@@ -15,6 +15,10 @@ public abstract class AbstractIO implements IO {
 
     protected final Jeu jeu;
 
+    /**
+     * Constructeur AbstractIO
+     * @param jeu 
+     */
     public AbstractIO(final Jeu jeu) {
         this.jeu = jeu;
     }

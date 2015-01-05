@@ -14,6 +14,10 @@ import jeux.Carte;
  */
 public class JoueurMain extends JoueurUnPaquet {
 
+    /**
+     * Recupere une carte aleatoire de notre deck
+     * @return une carte de notre liste de cartes
+     */
     @Override
     public Carte getCarte() {
         Random r = new Random();

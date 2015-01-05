@@ -33,6 +33,10 @@ public abstract class AbstractSynchronizedIO<T> extends AbstractIO implements Ob
 
     protected final InputHandler inputHandler;
 
+    /**
+     * Constructeur AbstractSynchronizedIO
+     * @param jeu 
+     */
     public AbstractSynchronizedIO(Jeu jeu) {
         super(jeu);
 
