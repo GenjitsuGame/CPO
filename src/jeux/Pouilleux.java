@@ -36,6 +36,7 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
         this.joueurs = new ArrayList<>();
         this.doublesList = new ArrayList<>();
         this.gagnants = new ArrayList<>();
+        this.init();
     }
 
     /**
@@ -222,8 +223,10 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
     
     @Override
     public void run() {
-        while (true) {
-            synchronized (this.verrou) {
+        this.notifier.notifyObservers(new EvenementJeu<>(this, EvenementJeu.ID.DEBUT_PARTIE));
+        synchronized (this.verrou) {
+            while (true) {
+
                 Integer indexCarte = this.evenements.get();
                 Joueur joueurCourant = this.joueurs.get(this.tour);
 
@@ -342,4 +345,11 @@ public class Pouilleux extends AbstractSynchronizedJeu<Integer> {
         throw new UnsupportedOperationException("Il n'y a pas de pli dans le pouilleux."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public int getJoueurCourant() {
+        synchronized (this.verrou) {
+            return this.tour;
+        }
+    }
+    
 }

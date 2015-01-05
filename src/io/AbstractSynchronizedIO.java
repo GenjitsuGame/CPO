@@ -31,7 +31,7 @@ public abstract class AbstractSynchronizedIO<T> extends AbstractIO implements Ob
     protected final Thread threadInput;
     protected final RingBuffer<String> evenementsInput;
 
-    protected final InputHandler inputHandler;
+    protected InputHandler inputHandler;
 
     /**
      * Constructeur AbstractSynchronizedIO
@@ -53,8 +53,6 @@ public abstract class AbstractSynchronizedIO<T> extends AbstractIO implements Ob
         this.notifier = new Notifier();
         this.evenementsAffichage = new RingBuffer<>();
 
-        this.inputHandler = InputHandlerFactory.getInstance("Bataille", jeu);
-        this.inputHandler.getNotifier().registerObserver(this);
 
         this.threadAffichage = new Thread(() -> {
             while (true) {
@@ -98,7 +96,8 @@ public abstract class AbstractSynchronizedIO<T> extends AbstractIO implements Ob
 
     protected abstract void traiteEvenement(T evenement);
 
-    protected void switchEvenementID(Integer evenement) {
+    protected boolean switchEvenementID(Integer evenement) {
+        boolean ret = true;
         if (evenement == EvenementJeu.ID.DEBUT_PARTIE) {
             this.debutPartie();
         } else if (evenement == EvenementJeu.ID.COUP_ILLEGAL) {
@@ -115,7 +114,10 @@ public abstract class AbstractSynchronizedIO<T> extends AbstractIO implements Ob
             this.nouveauGagnant();
         } else if (evenement == EvenementJeu.ID.NOUVEAU_PERDANT) {
             this.nouveauPerdant();
+        } else {
+            ret = false;
         }
+        return ret;
     }
 
     protected void coupIllegal() {

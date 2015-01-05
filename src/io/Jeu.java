@@ -44,4 +44,6 @@ public interface Jeu {
     public List<String> getPli();
     
     public void reprendre();
+    
+    public int getJoueurCourant();
 }

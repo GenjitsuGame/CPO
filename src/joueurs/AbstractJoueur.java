@@ -3,8 +3,7 @@
  */
 package joueurs;
 
-import java.util.List;
-import jeux.Carte;
+
 import jeux.Joueur;
 
 /**

@@ -14,6 +14,7 @@ import util.RingBuffer;
  *
  * @author Pascal luttgens
  * @param <T>
+ * @param <U>
  */
 public abstract class AbstractInputHandler<T extends Jeu, U> implements InputHandler, Runnable {
 

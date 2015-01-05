@@ -13,15 +13,17 @@ import io.InputHandler;
  * @author scalpa
  */
 public class InputHandlerFactory {
-    
+
     public static InputHandler getInstance(String type, Jeu jeu) {
         if (type.equals("Bataille")) {
             return new BatailleInputHandler(jeu);
+        } else if (type.equals("Pouilleux")) {
+            return new PouilleuxInputHandler(jeu);
         } else {
             throw new IllegalArgumentException("Type d'InputHandler inconnu. Les types connus sont :\n" + getListe());
         }
     }
-    
+
     public static String getListe() {
         return "Bataille,";
     }

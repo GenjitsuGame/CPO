@@ -5,8 +5,12 @@
  */
 package cartes;
 
+import java.io.File;
 import java.util.HashMap;
+import java.util.Iterator;
 import jeux.Carte;
+import org.json.JSONObject;
+import util.JSONUtil;
 
 /**
  *
@@ -41,19 +45,13 @@ public class CarteFrancaise extends CarteClassic {
     private static final HashMap<String, Integer> valeurs = new HashMap<>();
 
     static {
-        valeurs.put("deux", 1);
-        valeurs.put("trois", 2);
-        valeurs.put("quatre", 3);
-        valeurs.put("cinq", 4);
-        valeurs.put("six", 5);
-        valeurs.put("sept", 6);
-        valeurs.put("huit", 7);
-        valeurs.put("neuf", 8);
-        valeurs.put("dix", 9);
-        valeurs.put("valet", 10);
-        valeurs.put("reine", 11);
-        valeurs.put("roi", 12);
-        valeurs.put("as", 13);
+        JSONObject jsono = JSONUtil.getJSONObjectFromFile(new File("decks/ordre_valeur_cf.deck"));
+        JSONObject JSONvaleurs = jsono.getJSONObject("valeurs");
+        Iterator<String> it = JSONvaleurs.keys();
+        while (it.hasNext()) {
+            String key = it.next();
+            valeurs.put(key, JSONvaleurs.getInt(key));
+        }
     }
 
 }

@@ -5,6 +5,7 @@
  */
 package io;
 
+import inputhandlers.InputHandlerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,9 @@ public class BatailleIO extends SynchronizedIOImpl {
      */
     public BatailleIO(Jeu jeu) {
         super(jeu);
+        
+        this.inputHandler = InputHandlerFactory.getInstance("Bataille", jeu);
+        this.inputHandler.getNotifier().registerObserver(this);
     }
 
     

@@ -1,0 +1,17 @@
+{
+    "valeurs":{
+        "deux":"1",
+        "trois":"2",
+        "quatre":"3",
+        "cinq":"4",
+        "six":"5",
+        "sept":"6",
+        "huit":"7",
+        "neuf":"8",
+        "dix":"9",
+        "valet":"10",
+        "reine":"11",
+        "roi":"12",
+        "as":"13"
+    }
+}

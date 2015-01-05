@@ -6,6 +6,7 @@
 package io;
 
 import evenements.EvenementJeu;
+import inputhandlers.InputHandlerFactory;
 
 /**
  *
@@ -19,11 +20,19 @@ public class PouilleuxIO extends AbstractSynchronizedIO<EvenementJeu> {
      */
     public PouilleuxIO(Jeu jeu) {
         super(jeu);
+                this.inputHandler = InputHandlerFactory.getInstance("Pouilleux", jeu);
+        this.inputHandler.getNotifier().registerObserver(this);
     }
 
     @Override
     protected void traiteEvenement(EvenementJeu evenement) {
-        switchEvenementID(evenement.getID());
+        if (!switchEvenementID(evenement.getID())) {
+            if (evenement.getID() == EvenementJeu.ID.PIOCHE_CARTE) {
+                System.out.println("Joueur " + this.jeu.getJoueurCourant() + " recupere :");
+                System.out.println(((String[]) evenement.getObject()).toString());
+            }
+        }
+        
     }
 
     

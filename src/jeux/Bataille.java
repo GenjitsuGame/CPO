@@ -325,4 +325,10 @@ public class Bataille extends AbstractSynchronizedJeu<Integer> {
         }
     }
 
+    @Override
+    public int getJoueurCourant() {
+        throw new UnsupportedOperationException("Dans la bataille tous les joueurs jouent en meme temps."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
 }

@@ -3,11 +3,8 @@
  */
 package application;
 
-import evenements.EvenementCartes;
-import evenements.EvenementJeu;
-import io.BatailleIO;
-import io.SynchronizedIOImpl;
-import jeux.Bataille;
+import io.PouilleuxIO;
+import jeux.Pouilleux;
 
 /**
  *
@@ -15,9 +12,7 @@ import jeux.Bataille;
  */
 public class Main {
     public static void main(String[] args) {
-        EvenementJeu.ID lel = new EvenementJeu.ID();
-        EvenementCartes.ID e = new EvenementCartes.ID();
-        IO io = new BatailleIO(new Bataille());
+        IO io = new PouilleuxIO(new Pouilleux());
         io.start();
         while (true) {            
             io.input();
