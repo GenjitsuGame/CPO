@@ -14,18 +14,20 @@ import jeux.Bataille;
  * @author Pascal Luttgens
  */
 public class BatailleInputHandler extends AbstractInputHandler<Bataille> {
-
+    
+    protected HashSet<Integer> ayantJoue = new HashSet<>();
+    
     public BatailleInputHandler(Jeu jeu) {
         super(jeu);
     }
 
     @Override
     public void run() {
-        HashSet<Integer> ayantJoue = new HashSet<>();
-        while(true) {
+        while (true) {
             Integer joueur = Integer.parseInt(evenements.get());
             if (ayantJoue.contains(joueur)) {
-                throw new IllegalArgumentException("Le joueur " + joueur + " a deja joue ce tour.");
+                notifier.notifyObservers(Jeu.COUP_ILLEGAL);
+                continue;
             }
             ayantJoue.add(joueur);
             this.jeu.onNotify(joueur);

@@ -5,11 +5,13 @@
  */
 package io;
 
+import util.Subject;
+
 /**
  *
  * @author scalpa
  */
-public interface InputHandler {
+public interface InputHandler extends Subject {
     
     public void start();
     

@@ -5,9 +5,7 @@
  */
 package io;
 
-import java.util.HashMap;
 import java.util.List;
-import jeux.Carte;
 import util.Observer;
 import util.Subject;
 
@@ -18,15 +16,18 @@ import util.Subject;
 public interface Jeu extends Subject, Observer<Integer> {
 
         
-    public static final int TOUR_FINI = 1000;
-    public static final int PARTIE_FINIE = 1001;
+    public static final int FIN_TOUR = 1000;
+    public static final int FIN_PARTIE = 1001;
     public static final int DEBUT_PARTIE = 1002;
+    public static final int COUP_ILLEGAL = 2000;
     
     public void setOption(String option, String valeur);
     
     public void commencer();
     
-    public int[] getGagnant();
+    public int[] getGagnantPartie();
+    
+    public int[] getGagnantTour();
     
     public int getNbJoueurs();
     
@@ -40,5 +41,7 @@ public interface Jeu extends Subject, Observer<Integer> {
     
     public int tailleFausse();
     
-    public List<Carte> cartesJoueur(int joueur);
+    public List<String> cartesJoueur(int joueur);
+    
+    public List<List<String>> cartesJoueesCeTour();
 }

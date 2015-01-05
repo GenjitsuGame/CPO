@@ -6,6 +6,8 @@
 package io;
 
 import inputhandlers.InputHandlerFactory;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import util.Notifier;
 import util.RingBuffer;
@@ -17,7 +19,7 @@ import util.RingBuffer;
 public class SimpleIO extends AbstractIO {
 
     private final Object verrou;
-    
+
     private final Notifier<String> notifier;
 
     private final Thread threadAffichage;
@@ -37,7 +39,7 @@ public class SimpleIO extends AbstractIO {
         this.threadAffichage = new Thread(() -> {
             while (true) {
                 Integer evenement = evenementsAffichage.get();
-                // affichage.
+                switchEvenementID(evenement);
             }
         });
 
@@ -51,27 +53,51 @@ public class SimpleIO extends AbstractIO {
                 }
             }
         });
+        this.inputHandler.getNotifier().registerObserver(this);
     }
 
     @Override
-    public void onNotify(Integer event) {
+    public final void onNotify(Integer event) {
         this.evenementsAffichage.add(event);
     }
-    
+
     @Override
     public void input() {
         Scanner sc = new Scanner(System.in);
-        
         evenementsInput.add(sc.nextLine());
     }
 
     @Override
     public void start() {
-        synchronized (verrou) {            
+        synchronized (verrou) {
             this.jeu.commencer();
             this.threadAffichage.start();
             this.threadInput.start();
             this.inputHandler.start();
         }
     }
+
+
+    @Override
+    protected void coupIllegal() {
+        System.out.println("Coup Illegal");
+    }
+
+    @Override
+    protected void finPartie() {
+        System.out.println("PARTIE FINIE");
+        System.out.println(Arrays.toString(jeu.getGagnantPartie()));
+    }
+
+    @Override
+    protected void debutPartie() {
+        System.out.println("DEBUT PARTIE");
+    }
+
+    @Override
+    protected void finTour() {
+        System.out.println(Arrays.toString(jeu.getGagnantTour()));
+        System.out.println("TOUR FINI");
+    }
+
 }

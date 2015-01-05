@@ -6,6 +6,7 @@
 
 package cartes;
 
+import java.util.Objects;
 import jeux.Carte;
 
 /**
@@ -34,6 +35,24 @@ public class CarteClassic extends AbstractCarte {
     @Override
     public int compareTo(Carte c) {
         throw new UnsupportedOperationException("CompareTo n'est pas implementee dans CarteClassic, il faut utiliser une sous-classe qui l'implemente.");
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CarteClassic other = (CarteClassic) obj;
+        if (!Objects.equals(this.valeur, other.valeur)) {
+            return false;
+        }
+        if (!Objects.equals(this.type, other.type)) {
+            return false;
+        }
+        return true;
     }
     
 

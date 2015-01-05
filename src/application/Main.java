@@ -3,6 +3,7 @@
  */
 package application;
 
+import io.BatailleIO;
 import io.SimpleIO;
 import jeux.Bataille;
 
@@ -12,7 +13,7 @@ import jeux.Bataille;
  */
 public class Main {
     public static void main(String[] args) {
-        IO io = new SimpleIO(new Bataille());
+        IO io = new BatailleIO(new Bataille());
         io.start();
         while (true) {            
             io.input();

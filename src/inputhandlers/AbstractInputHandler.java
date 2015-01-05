@@ -7,6 +7,7 @@ import io.Jeu;
 import io.InputHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import util.Notifier;
 import util.RingBuffer;
 
 /**
@@ -19,20 +20,33 @@ public abstract class AbstractInputHandler<T extends Jeu> implements InputHandle
     protected final T jeu;
     protected final RingBuffer<String> evenements;
     private final Thread thread;
-    
+    protected final Notifier<Integer> notifier;
+
     public AbstractInputHandler(Jeu jeu) {
         this.thread = new Thread(this);
         this.jeu = (T) jeu;
         this.evenements = new RingBuffer<>();
+        this.notifier = new Notifier<>();
     }
-    
+
     @Override
     public void traite(String input) {
         evenements.add(input);
     }
+
+    private Thread.UncaughtExceptionHandler setUncaughtExceptionHandler() {
+        return (Thread thread1, Throwable thrwbl) -> {
+            handleException(thread1, thrwbl);
+        };
+    }
     
+    protected void handleException(Thread thread, Throwable thrwbl) {
+        
+    }
+
     @Override
     public void start() {
+        this.thread.setUncaughtExceptionHandler(this.setUncaughtExceptionHandler());
         this.thread.start();
     }
 
@@ -43,4 +57,10 @@ public abstract class AbstractInputHandler<T extends Jeu> implements InputHandle
             Logger.getLogger(AbstractInputHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    @Override
+    public Notifier getNotifier() {
+        return this.notifier;
+    }
+
 }
